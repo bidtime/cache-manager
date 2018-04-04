@@ -8,18 +8,19 @@ import org.apache.commons.lang.StringUtils;
  * @author jss
  * 
  */
-public class MemcacheKeyManage extends CacheManage {
+public class CacheFlagKeyManager extends CacheKeyManager {
 	
-	public MemcacheKeyManage() {
+	public CacheFlagKeyManager() {
 		
 	}
 
+	@Override
 	public String getKeyId(String key) {
 		if (StringUtils.isNotEmpty(userFlag)) {
 			StringBuilder sb = new StringBuilder();
 			try {
-				sb.append(key);
 				sb.append(userFlag);
+				sb.append(key);
 				return sb.toString();
 			} finally {
 				sb.setLength(0);
@@ -35,8 +36,8 @@ public class MemcacheKeyManage extends CacheManage {
 		if (StringUtils.isNotEmpty(userFlag)) {
 			StringBuilder sb = new StringBuilder();
 			try {
-				sb.append(key);
 				sb.append(userFlag);
+				sb.append(key);
 				sb.append(ext);
 				return sb.toString();
 			} finally {
@@ -46,36 +47,6 @@ public class MemcacheKeyManage extends CacheManage {
 		} else {
 			return key;
 		}
-	}
-	
-	@Override
-	public void set(String key, int seconds, Object value) {
-		super.set(getKeyId(key), seconds, value);
-	}
-	
-	@Override
-	public void replace(String key, int seconds, Object value) {
-		super.replace(getKeyId(key), seconds, value);
-	}
-	
-	@Override
-	public Object get(String key, boolean delete) {
-		return super.get(getKeyId(key), false);
-	}
-	
-	@Override
-	public void delete(String key) {
-		super.delete(getKeyId(key));
-	}
-
-	protected String userFlag;
-
-	public String getUserFlag() {
-		return userFlag;
-	}
-
-	public void setUserFlag(String userFlag) {
-		this.userFlag = userFlag;
 	}
 
 }

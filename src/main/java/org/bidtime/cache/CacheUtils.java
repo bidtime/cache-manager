@@ -4,7 +4,7 @@ package org.bidtime.cache;
  * 
  * jss
  */
-public class MemcacheUtils {
+public class CacheUtils {
 	
     protected static boolean isNotEmpty(String str) {
         return !isEmpty(str);

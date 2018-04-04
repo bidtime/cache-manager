@@ -9,15 +9,15 @@ import org.slf4j.LoggerFactory;
  * 
  * jss
  */
-public class CacheManage {
+public class CacheManager {
 	
-	private static final Logger log = LoggerFactory.getLogger(CacheManage.class);
+	private static final Logger log = LoggerFactory.getLogger(CacheManager.class);
 	
 	private AbstractCache clientCache;
 
 	protected int defaultTm = 2 * 60 * 60;		// default: 2h = 7200s;
 	
-	public CacheManage() {
+	public CacheManager() {
 	}
 
 	protected String getKeyId(String key, String ext) {
@@ -171,18 +171,18 @@ public class CacheManage {
 	// equals
 	
     public boolean equals(String key, String value) {
-		return MemcacheUtils.eq(getString(key), value);
+		return CacheUtils.eq(getString(key), value);
     }
     
     public boolean notEquals(String key, String value) {
-		return !MemcacheUtils.eq(getString(key), value);
+		return !CacheUtils.eq(getString(key), value);
     }
     
     public boolean equals(String key, String newValue, boolean allowEmpty) {
     	if (allowEmpty) {
     		return equals(key, newValue);
     	} else {
-    		return MemcacheUtils.equalsWithoutEmpty(getString(key), newValue);
+    		return CacheUtils.equalsWithoutEmpty(getString(key), newValue);
     	}
     }
     
@@ -190,19 +190,19 @@ public class CacheManage {
     	if (allowEmpty) {
     		return notEquals(key, newValue);
     	} else {
-    		return MemcacheUtils.notEquals(getString(key), newValue);
+    		return CacheUtils.notEquals(getString(key), newValue);
     	}
     }
     
     public boolean equalsIgnoreCase(String key, String value) {
-    	return MemcacheUtils.eqIgnoreCase(getString(key), value);
+    	return CacheUtils.eqIgnoreCase(getString(key), value);
     }
     
     public boolean equalsIgnoreCase(String key, String newValue, boolean allowEmpty) {
     	if (allowEmpty) {
     		return equalsIgnoreCase(key, newValue);
     	} else {
-    		return MemcacheUtils.equalsIgnoreCaseWithoutEmpty(getString(key), newValue);
+    		return CacheUtils.equalsIgnoreCaseWithoutEmpty(getString(key), newValue);
     	}
     }
 	
