@@ -6,307 +6,367 @@ import org.slf4j.LoggerFactory;
 //import net.spy.memcached.MemcachedClient;
 
 /**
- * 
  * jss
  */
 public class CacheManager {
-	
-	private static final Logger log = LoggerFactory.getLogger(CacheManager.class);
-	
-	private AbstractCache clientCache;
 
-	protected int defaultTm = 2 * 60 * 60;		// default: 2h = 7200s;
-	
-	public CacheManager() {
-	}
+  private static final Logger log = LoggerFactory.getLogger(CacheManager.class);
 
-	protected String getKeyId(String key, String ext) {
-		return key + ext;
-	}
-	
-	// set
-	
-	public void set(String key, int seconds, Object value) {
-		try {
-			clientCache.set(key, seconds, value);
-			if (log.isDebugEnabled()) {
-				StringBuffer sb = new StringBuffer();
-				try {
-					sb.append("set ");
-					sb.append(key);
-					sb.append(":");
-					sb.append(value);
-					sb.append(" tm(");
-					sb.append(seconds);
-					sb.append("s).");
-					log.debug(sb.toString());
-				} finally {
-					sb.setLength(0); // 设置StringBuffer变量的长度为0
-					sb = null;
-				}
-			}
-		} catch (Exception e) {
-			log.error("set: key {}, {}", key, e);
-		}
-	}
+  private AbstractCache clientCache;
 
-	public void set(String key, Object value) {
-		this.set(key, defaultTm, value);
-	}
+  protected int defaultTm = 2 * 60 * 60; // default: 2h = 7200s;
 
-	public void set(String key, String ext, int seconds, Object value) {
-		this.set(getKeyId(key, ext), seconds, value);
-	}
+  public CacheManager() {
+  }
 
-	public void set(String key, String ext, Object value) {
-		this.set(key, ext, defaultTm, value);
-	}
-	
-	// replace
+  protected String getKeyId(String key, String ext) {
+    return key + ext;
+  }
 
-	public void replace(String key, int seconds, Object value) {
-		try {
-			clientCache.replace(key, seconds, value);
-			if (log.isDebugEnabled()) {
-				StringBuffer sb = new StringBuffer();
-				try {
-					sb.append("replace ");
-					sb.append(key);
-					sb.append(":");
-					sb.append(value);
-					sb.append(" tm(");
-					sb.append(seconds);
-					sb.append("s).");
-					log.debug(sb.toString());
-				} finally {
-					sb.setLength(0); // 设置StringBuffer变量的长度为0
-					sb = null;
-				}
-			}
-		} catch (Exception e) {
-			log.error("replace: key {}, {}", key, e);
-		}
-	}
+  // set
 
-	public void replace(String key, Object value) {
-		this.replace(key, defaultTm, value);
-	}
-	
-	public void replace(String key, String ext, int seconds, Object value) {
-		this.replace(getKeyId(key, ext), seconds, value);
-	}
-	
-	public void replace(String key, String ext, Object value) {
-		this.replace(key, ext, defaultTm, value);
-	}
-	
-	// get
-
-	public Object get(String key, boolean delete) {
-		Object value = null;
-		try {
-			value = clientCache.get(key);
-			if (log.isDebugEnabled()) {
-				StringBuilder sb = new StringBuilder();
-				try {
-					sb.append("get ");
-					sb.append(key);
-					sb.append(":");
-					sb.append(value);
-					log.debug(sb.toString());
-				} finally {
-					sb.setLength(0); // 设置StringBuffer变量的长度为0
-					sb = null;
-				}
-			}
-		} catch (Exception e) {
-			log.error("get: key {}, {}", key, e);
-		} finally {
-			if (delete) {
-				this.delete(key);
-			}
-		}
-		return value;
-	}
-
-	public Object get(String key) {
-		return this.get(key, false);
-	}
-	
-	//      get ext
-
-	public Object get(String key, String ext, boolean delete) {
-		return this.get(getKeyId(key, ext), delete);
-	}
-
-	public Object get(String key, String ext) {
-		return this.get(key, ext, false);
-	}
-	
-	//     get string
-	
-	public String getString(String key) {
-		return getString(key, false);
-	}
-	
-	public String getString(String key, boolean delete) {
-		Object obj = get(key, delete);
-		return String.valueOf( obj );
-	}
-	
-	// delete
-	
-	public void delete(String key) {
-		try {
-			clientCache.delete(key);
-		} catch (Exception e) {
-			log.error("delete: key {}, {}", key, e);
-		}
-	}
-	
-	public void delete(String key, String ext) {
-		delete(getKeyId(key, ext));
-	}
-	
-	// equals
-	
-    public boolean equals(String key, String value) {
-		return CacheUtils.eq(getString(key), value);
+  public void setString(String key, int seconds, String value) {
+    try {
+      clientCache.setString(key, seconds, value);
+      if (log.isDebugEnabled()) {
+        StringBuffer sb = new StringBuffer();
+        try {
+          sb.append("setString ");
+          sb.append(key);
+          sb.append(":");
+          sb.append(value);
+          sb.append(" tm(");
+          sb.append(seconds);
+          sb.append("s).");
+          log.debug(sb.toString());
+        } finally {
+          sb.setLength(0); // 设置StringBuffer变量的长度为0
+          sb = null;
+        }
+      }
+    } catch (Exception e) {
+      log.error("setString: key {}, {}", key, e);
     }
-    
-    public boolean notEquals(String key, String value) {
-		return !CacheUtils.eq(getString(key), value);
+  }
+
+  public void set(String key, int seconds, Object value) {
+    try {
+      clientCache.set(key, seconds, value);
+      if (log.isDebugEnabled()) {
+        StringBuffer sb = new StringBuffer();
+        try {
+          sb.append("set ");
+          sb.append(key);
+          sb.append(":");
+          sb.append(value);
+          sb.append(" tm(");
+          sb.append(seconds);
+          sb.append("s).");
+          log.debug(sb.toString());
+        } finally {
+          sb.setLength(0); // 设置StringBuffer变量的长度为0
+          sb = null;
+        }
+      }
+    } catch (Exception e) {
+      log.error("set: key {}, {}", key, e);
     }
-    
-    public boolean equals(String key, String newValue, boolean allowEmpty) {
-    	if (allowEmpty) {
-    		return equals(key, newValue);
-    	} else {
-    		return CacheUtils.equalsWithoutEmpty(getString(key), newValue);
-    	}
+  }
+
+  public void set(String key, Object value) {
+    this.set(key, defaultTm, value);
+  }
+
+  public void set(String key, String ext, int seconds, Object value) {
+    this.set(getKeyId(key, ext), seconds, value);
+  }
+
+  public void set(String key, String ext, Object value) {
+    this.set(key, ext, defaultTm, value);
+  }
+
+  // replace
+
+  public void replace(String key, int seconds, Object value) {
+    try {
+      clientCache.replace(key, seconds, value);
+      if (log.isDebugEnabled()) {
+        StringBuffer sb = new StringBuffer();
+        try {
+          sb.append("replace ");
+          sb.append(key);
+          sb.append(":");
+          sb.append(value);
+          sb.append(" tm(");
+          sb.append(seconds);
+          sb.append("s).");
+          log.debug(sb.toString());
+        } finally {
+          sb.setLength(0); // 设置StringBuffer变量的长度为0
+          sb = null;
+        }
+      }
+    } catch (Exception e) {
+      log.error("replace: key {}, {}", key, e);
     }
-    
-    public boolean notEquals(String key, String newValue, boolean allowEmpty) {
-    	if (allowEmpty) {
-    		return notEquals(key, newValue);
-    	} else {
-    		return CacheUtils.notEquals(getString(key), newValue);
-    	}
+  }
+
+  public void replace(String key, Object value) {
+    this.replace(key, defaultTm, value);
+  }
+
+  public void replace(String key, String ext, int seconds, Object value) {
+    this.replace(getKeyId(key, ext), seconds, value);
+  }
+
+  public void replace(String key, String ext, Object value) {
+    this.replace(key, ext, defaultTm, value);
+  }
+
+  // get
+
+  public Object get(String key, boolean delete) {
+    Object value = null;
+    try {
+      value = clientCache.get(key);
+      if (log.isDebugEnabled()) {
+        StringBuilder sb = new StringBuilder();
+        try {
+          sb.append("get ");
+          sb.append(key);
+          sb.append(":");
+          sb.append(value);
+          log.debug(sb.toString());
+        } finally {
+          sb.setLength(0); // 设置StringBuffer变量的长度为0
+          sb = null;
+        }
+      }
+    } catch (Exception e) {
+      log.error("get: key {}, {}", key, e);
+    } finally {
+      if (delete) {
+        this.delete(key);
+      }
     }
-    
-    public boolean equalsIgnoreCase(String key, String value) {
-    	return CacheUtils.eqIgnoreCase(getString(key), value);
+    return value;
+  }
+
+  public Object get(String key) {
+    return this.get(key, false);
+  }
+
+  //      get ext
+
+  public Object get(String key, String ext, boolean delete) {
+    return this.get(getKeyId(key, ext), delete);
+  }
+
+  public Object get(String key, String ext) {
+    return this.get(key, ext, false);
+  }
+
+  //     get string
+
+  public String getString(String key) {
+    return getString(key, false);
+  }
+
+  //      get ext
+
+  public Object getString(String key, String ext, boolean delete) {
+    return this.getString(getKeyId(key, ext), delete);
+  }
+
+  public Object getString(String key, String ext) {
+    return this.getString(key, ext, false);
+  }
+
+  //	public String getString(String key, boolean delete) {
+  //		Object obj = get(key, delete);
+  //		return String.valueOf( obj );
+  //	}
+
+  public String getString(String key, boolean delete) {
+    String value = null;
+    try {
+      value = clientCache.getString(key);
+      if (log.isDebugEnabled()) {
+        StringBuilder sb = new StringBuilder();
+        try {
+          sb.append("getString ");
+          sb.append(key);
+          sb.append(":");
+          sb.append(value);
+          log.debug(sb.toString());
+        } finally {
+          sb.setLength(0); // 设置StringBuffer变量的长度为0
+          sb = null;
+        }
+      }
+    } catch (Exception e) {
+      log.error("getString: key {}, {}", key, e);
+    } finally {
+      if (delete) {
+        this.delete(key);
+      }
     }
-    
-    public boolean equalsIgnoreCase(String key, String newValue, boolean allowEmpty) {
-    	if (allowEmpty) {
-    		return equalsIgnoreCase(key, newValue);
-    	} else {
-    		return CacheUtils.equalsIgnoreCaseWithoutEmpty(getString(key), newValue);
-    	}
+    return value;
+  }
+
+  // delete
+
+  public void delete(String key) {
+    try {
+      clientCache.delete(key);
+    } catch (Exception e) {
+      log.error("delete: key {}, {}", key, e);
     }
-	
-	// dec
-	
-	public void dec(String key) {
-		inc(key, -1);
-	}
-	
-	public void dec(String key, String ext) {
-		inc(key, ext, -1);
-	}
-	
-	public void dec(String key, String ext, int var) {
-		inc(key, ext, -var);
-	}
+  }
 
-	// inc
-	
-	public void inc(String key) {
-		inc(key, 1);
-	}
-	
-	public void inc(String key, String ext) {
-		inc(key, ext, 1);
-	}
+  public void delete(String key, String ext) {
+    delete(getKeyId(key, ext));
+  }
 
-	public void inc(String key, String ext, int var) {
-		this.inc(key + ext, var);
-	}
-	
-	//     inc raw
-	
-	public void inc(String key, int var) {
-		Object value = get(key);
-		if (value == null) {
-			set(key, var);
-		} else {
-			if (value instanceof Integer) {
-				set(key, (Integer) value + var);
-			} else if (value instanceof Long) {
-				set(key, (Long) value + var);
-			} else if (value instanceof Short) {
-				set(key, (Short) value + var);
-			} else if (value instanceof Double) {
-				set(key, (Double) value + var);
-			} else if (value instanceof Float) {
-				set(key, (Float) value + var);
-			} else {
-				int n = Integer.parseInt(String.valueOf(value));
-				set(key, n + var);
-			}
-		}
-	}
+  // equals
 
-	public Integer getInteger(String key) {
-		Object value = get(key);
-		if (value != null) {
-			if (value instanceof Number) {
-				return ((Number) value).intValue();
-			} else {
-				return Integer.parseInt(String.valueOf(value));
-			}
-		} else {
-			return null;
-		}
-	}
+  public boolean equals(String key, String value) {
+    return CacheUtils.eq(getString(key), value);
+  }
 
-	// compareTo
+  public boolean notEquals(String key, String value) {
+    return !CacheUtils.eq(getString(key), value);
+  }
 
-	public int compareTo(String key, Integer value) {
-		Integer oldVal = getInteger(key);
-		if (oldVal != null) {
-			return oldVal.compareTo(value);
-		} else {
-			return -1;
-		}
-	}
+  public boolean equals(String key, String newValue, boolean allowEmpty) {
+    if (allowEmpty) {
+      return equals(key, newValue);
+    } else {
+      return CacheUtils.equalsWithoutEmpty(getString(key), newValue);
+    }
+  }
 
-	public int compareTo(String key, int value) {
-		Integer oldVal = getInteger(key);
-		if (oldVal != null) {
-			return oldVal.compareTo(value);
-		} else {
-			return -1;
-		}
-	}
-	
-	// defaultTm
+  public boolean notEquals(String key, String newValue, boolean allowEmpty) {
+    if (allowEmpty) {
+      return notEquals(key, newValue);
+    } else {
+      return CacheUtils.notEquals(getString(key), newValue);
+    }
+  }
 
-	public int getDefaultTm() {
-		return defaultTm;
-	}
+  public boolean equalsIgnoreCase(String key, String value) {
+    return CacheUtils.eqIgnoreCase(getString(key), value);
+  }
 
-	public void setDefaultTm(int defaultTm) {
-		this.defaultTm = defaultTm;
-	}
+  public boolean equalsIgnoreCase(String key, String newValue, boolean allowEmpty) {
+    if (allowEmpty) {
+      return equalsIgnoreCase(key, newValue);
+    } else {
+      return CacheUtils.equalsIgnoreCaseWithoutEmpty(getString(key), newValue);
+    }
+  }
 
-	public AbstractCache getClientCache() {
-		return clientCache;
-	}
+  // dec
 
-	public void setClientCache(AbstractCache clientCache) {
-		this.clientCache = clientCache;
-	}
+  public void dec(String key) {
+    inc(key, -1);
+  }
+
+  public void dec(String key, String ext) {
+    inc(key, ext, -1);
+  }
+
+  public void dec(String key, String ext, int var) {
+    inc(key, ext, -var);
+  }
+
+  // inc
+
+  public void inc(String key) {
+    inc(key, 1);
+  }
+
+  public void inc(String key, String ext) {
+    inc(key, ext, 1);
+  }
+
+  public void inc(String key, String ext, int var) {
+    this.inc(key + ext, var);
+  }
+
+  //     inc raw
+
+  public void inc(String key, int var) {
+    Object value = get(key);
+    if (value == null) {
+      set(key, var);
+    } else {
+      if (value instanceof Integer) {
+        set(key, (Integer) value + var);
+      } else if (value instanceof Long) {
+        set(key, (Long) value + var);
+      } else if (value instanceof Short) {
+        set(key, (Short) value + var);
+      } else if (value instanceof Double) {
+        set(key, (Double) value + var);
+      } else if (value instanceof Float) {
+        set(key, (Float) value + var);
+      } else {
+        int n = Integer.parseInt(String.valueOf(value));
+        set(key, n + var);
+      }
+    }
+  }
+
+  public Integer getInteger(String key) {
+    Object value = get(key);
+    if (value != null) {
+      if (value instanceof Number) {
+        return ((Number) value).intValue();
+      } else {
+        return Integer.parseInt(String.valueOf(value));
+      }
+    } else {
+      return null;
+    }
+  }
+
+  // compareTo
+
+  public int compareTo(String key, Integer value) {
+    Integer oldVal = getInteger(key);
+    if (oldVal != null) {
+      return oldVal.compareTo(value);
+    } else {
+      return -1;
+    }
+  }
+
+  public int compareTo(String key, int value) {
+    Integer oldVal = getInteger(key);
+    if (oldVal != null) {
+      return oldVal.compareTo(value);
+    } else {
+      return -1;
+    }
+  }
+
+  // defaultTm
+
+  public int getDefaultTm() {
+    return defaultTm;
+  }
+
+  public void setDefaultTm(int defaultTm) {
+    this.defaultTm = defaultTm;
+  }
+
+  public AbstractCache getClientCache() {
+    return clientCache;
+  }
+
+  public void setClientCache(AbstractCache clientCache) {
+    this.clientCache = clientCache;
+  }
 
 }

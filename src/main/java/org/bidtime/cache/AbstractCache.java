@@ -7,8 +7,10 @@ package org.bidtime.cache;
 public abstract class AbstractCache {
 
 	// set
-	
-	public abstract void set(String key, int seconds, Object o) throws Exception;
+  
+  public abstract void setString(String key, int seconds, String s) throws Exception;
+  
+  public abstract void set(String key, int seconds, Object o) throws Exception;
 	
 	// delete
 	
@@ -20,6 +22,9 @@ public abstract class AbstractCache {
 	
 	// get
 
-	public abstract Object get(String key) throws Exception;
+  public abstract String getString(String key) throws Exception;
+
+  //public abstract <K> K get(String key, Class<K> k) throws Exception;
+  public abstract Object get(String key) throws Exception;
 
 }
