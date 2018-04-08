@@ -128,7 +128,7 @@ public class CacheManager {
   public Object get(String key, boolean delete) {
     Object value = null;
     try {
-      value = clientCache.get(key);
+      value = clientCache.get(key, delete);
       if (log.isDebugEnabled()) {
         StringBuilder sb = new StringBuilder();
         try {
@@ -144,10 +144,6 @@ public class CacheManager {
       }
     } catch (Exception e) {
       log.error("get: key {}, {}", key, e);
-    } finally {
-      if (delete) {
-        this.delete(key);
-      }
     }
     return value;
   }
@@ -182,15 +178,10 @@ public class CacheManager {
     return this.getString(key, ext, false);
   }
 
-  //	public String getString(String key, boolean delete) {
-  //		Object obj = get(key, delete);
-  //		return String.valueOf( obj );
-  //	}
-
-  public String getString(String key, boolean delete) {
+ 	public String getString(String key, boolean delete) {
     String value = null;
     try {
-      value = clientCache.getString(key);
+      value = clientCache.getString(key, delete);
       if (log.isDebugEnabled()) {
         StringBuilder sb = new StringBuilder();
         try {
@@ -206,13 +197,9 @@ public class CacheManager {
       }
     } catch (Exception e) {
       log.error("getString: key {}, {}", key, e);
-    } finally {
-      if (delete) {
-        this.delete(key);
-      }
     }
     return value;
-  }
+ 	}
 
   // delete
 

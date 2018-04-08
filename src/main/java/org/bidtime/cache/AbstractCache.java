@@ -22,9 +22,9 @@ public abstract class AbstractCache {
 	
 	// get
 
-  public abstract String getString(String key) throws Exception;
+  public abstract String getString(String key, boolean del) throws Exception;
 
   //public abstract <K> K get(String key, Class<K> k) throws Exception;
-  public abstract Object get(String key) throws Exception;
+  public abstract Object get(String key, boolean del) throws Exception;
 
 }
